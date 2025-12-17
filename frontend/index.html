@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-       <meta charset="UTF-8" />
-        <meta name = viewport content = "width=device-width, initial screen-scale=1.0"/>
-        <link rel="stylesheet" href="style.css"/>
-        <title>Task Manager</title>
-    
-    </head>
-    <body>
-        <header>
-            <h1>Task Management System</h1> 
-            <nav>
-                <a href="#">Login</a>
-                <a href="#">Register</a>
-            </nav>
-        </header>
-        <main>
-            <section>
-                <h2>Welcome</h2>
-                <p>Manage your task efficiently using cloud based system.</p>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+<body>
 
-                <button id="checkbackend">check backend status</button>
-                <p id="statusmessage"></p>
-            </section>
-        </main>
-        <footer>
-            <p>© 2025 Task Manager</p>
-        </footer>
-        <script src="script.js"></script>
-    </body>
+    <header>
+        <h1>Task Management System</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Backend Status</h2>
+            <button id="checkBackend">Check Backend Status</button>
+            <p id="statusMessage"></p>
+        </section>
+
+        <section>
+            <h2>Register</h2>
+            <input type="text" id="name" placeholder="Name" />
+            <input type="email" id="email" placeholder="Email" />
+            <input type="password" id="password" placeholder="Password" />
+            <button id="registerBtn">Register</button>
+            <p id="registerMessage"></p>
+        </section>
+
+        <section>
+            <h2>Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" />
+            <input type="password" id="loginPassword" placeholder="Password" />
+            <button id="loginBtn">Login</button>
+            <p id="loginMessage"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Task Manager</p>
+    </footer>
+
+</body>
 </html>
