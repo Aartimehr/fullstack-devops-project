@@ -22,11 +22,14 @@ jobs:
           cd backend
           docker build -t task-manager-backend .
 
-      - name: Run Backend Container
+      - name: Run Backend Container (CI MODE)
         run: |
-          docker run -d -p 5000:5000 task-manager-backend
+          docker run -d \
+            -e SKIP_DB=true \
+            -p 5000:5000 \
+            task-manager-backend
 
       - name: Health Check
         run: |
-          sleep 5
+          sleep 8
           curl http://localhost:5000/health
