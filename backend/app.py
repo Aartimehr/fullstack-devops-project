@@ -18,9 +18,12 @@ CORS(app)
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key")
 jwt = JWTManager(app)
 
+# -------------------- CI SAFE FLAG --------------------
+SKIP_DB = os.getenv("SKIP_DB", "false").lower() == "true"
+
 # -------------------- DATABASE CONFIG --------------------
 DB_CONFIG = {
-    "host":os.getenv("DB_HOST", "mysql_db"),
+    "host": os.getenv("DB_HOST", "mysql_db"),
     "user": os.getenv("DB_USER", "root"),
     "password": os.getenv("DB_PASSWORD", "Nikku1234@"),
     "database": os.getenv("DB_NAME", "task_manager"),
@@ -34,6 +37,10 @@ cursor = None
 def connect_db():
     """Retry MySQL connection until it is ready"""
     global db, cursor
+
+    if SKIP_DB:
+        print("⚠️ SKIP_DB enabled — running without MySQL (CI mode)")
+        return
 
     retries = 10
     while retries > 0:
@@ -50,18 +57,24 @@ def connect_db():
     raise Exception("❌ Could not connect to MySQL after retries")
 
 
-# 🔥 CONNECT TO DB (SAFE WAY)
+# 🔥 CONNECT TO DB (SAFE)
 connect_db()
 
 # -------------------- HEALTH CHECK --------------------
 @app.route("/health")
 def health():
-    return jsonify({"message": "Backend is running"}), 200
+    return jsonify({
+        "status": "ok",
+        "db_connected": False if SKIP_DB else db is not None
+    }), 200
 
 
 # -------------------- REGISTER --------------------
 @app.route("/register", methods=["POST"])
 def register():
+    if SKIP_DB:
+        return jsonify({"message": "DB disabled in CI mode"}), 503
+
     data = request.json
     name = data.get("name")
     email = data.get("email")
@@ -87,6 +100,9 @@ def register():
 # -------------------- LOGIN --------------------
 @app.route("/login", methods=["POST"])
 def login():
+    if SKIP_DB:
+        return jsonify({"message": "DB disabled in CI mode"}), 503
+
     data = request.json
     email = data.get("email")
     password = data.get("password")
